@@ -158,7 +158,7 @@ subtype Months is Integer range 1 .. 12;
 -- completely new, Float-incompatible type:
 type Bitcoin is new Float;
 -- type that wraps around:
-type Hours is mod 24;
+type Hours is mod 24; -- ranges from 0 to 23
 \end{lstlisting}
 
 \subsection{Array Types}
@@ -210,8 +210,8 @@ end loop;
 
 \subsection{Iterator Loop}
 \begin{lstlisting}
-for i in Months'Range loop
-  -- see first column
+for i in My_Weekdays'Range loop
+  -- see first column, also works with other types
 end loop;
 \end{lstlisting}
 
@@ -257,7 +257,7 @@ and, or, xor, not -- Logical operators
 +, -, *, /, mod, rem, **, abs, =, /=, <, <=, >, >=
 \end{lstlisting}
 
-\subsection{Boolean Short-Cut Operators}
+\subsection{Boolean Short-Circuit Operators}
 \begin{lstlisting}
 if A and then B then ... -- only check B when A true
 if A or else B then ... -- only check B when A false
