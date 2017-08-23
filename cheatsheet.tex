@@ -1,0 +1,356 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Ada/SPARK~2014 Mini Cheat Sheet
+%
+% Original author:
+% Martin Becker (https://github.com/mbeckersys)
+%
+% License:
+% The MIT License (see included LICENSE file)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[landscape]{geometry}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{url}
+\usepackage{multicol}
+\usepackage[
+  colorlinks=false, 
+  pdftitle={Cheatsheet}, 
+  pdfauthor={Martin Becker <martin.becker@tum.de>}, 
+  pdfsubject={SPARK~2014 Mini Cheat Sheet}, 
+  pdfkeywords={Ada/SPARK, Cheatsheet}
+]{hyperref}
+
+%% page margins & headings
+\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm}
+\pagestyle{empty}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+\setlength{\unitlength}{1mm}
+\setlength{\parindent}{0pt}
+
+%% Fonts
+\renewcommand{\familydefault}{\sfdefault}
+
+%% Color definitions 
+\definecolor{Pantone300}{RGB}{  0, 101, 189}
+\definecolor{Pantone540}{RGB}{  0,  51,  89}
+\definecolor{Pantone301}{RGB}{  0,  82, 147}
+\definecolor{Pantone285}{RGB}{  0, 115, 207}
+\definecolor{Pantone542}{RGB}{100, 160, 200}
+\definecolor{Pantone283}{RGB}{152, 198, 234}
+\definecolor{darkgray}{RGB}{ 88, 88, 90}
+\definecolor{gray}{RGB}{ 156, 157, 159}
+\definecolor{lightgray}{RGB}{ 217, 218, 219}
+
+%% all smaller, please
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries\color{Pantone300}}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.1ex plus .0ex\nointerlineskip}%
+                                {\normalfont\scriptsize\color{Pantone542}}}
+\makeatother
+
+
+%% listing setup
+% listings default format
+\lstset{captionpos=t, 
+  xleftmargin=.2cm,
+  basicstyle=\ttfamily\scriptsize,%
+  language=Ada,
+  commentstyle=\color{gray},
+  keywordstyle=\bfseries\color{black},
+  keywordstyle=[1]\bfseries\color{black},
+  stringstyle=\color{darkgray},
+  morekeywords={Dim_Type,Angle_Type,Time_Type,Angular_Velocity_Type,Lat_Type,Val,Pred,Succ,Image,Last,First,Length,Pos,Floor,Ceil,Size},
+  identifierstyle=\color{darkgray},
+  extendedchars=true,%
+ % backgroundcolor=\color{shadecolor},%
+  breaklines=true, % Zeilenumbruch
+  breakautoindent=true, % Bei Zeilenumbruch einrücken
+  tabsize=2, % Breite eines Tabulators
+  postbreak=\space,
+  showspaces=false, % Keine Leerzeichensymbole
+  showtabs=false, % Keine Tabsymbole
+  showstringspaces=false,% Leerzeichen in Strings         
+  rulecolor=\color{gray},
+  frame=l}
+
+
+\begin{document}
+%\footnotesize
+\raggedright
+{\LARGE\textcolor{Pantone301}{\bf Ada/SPARK~2014 -- Mini Cheat Sheet}}
+
+\begin{multicols*}{3}
+
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\section{Packages}
+
+\subsection{Specification (*.ads)}
+\begin{lstlisting}
+package P with SPARK_Mode => On is
+   procedure Something (X : Integer);
+end P;
+\end{lstlisting}
+\subsection{Body (*.adb)}
+\begin{lstlisting}
+package body P with SPARK_Mode => On is
+   procedure Something (X : Integer) is
+   begin
+     -- ..
+   end Something;
+end P;
+\end{lstlisting}
+
+\subsection{Referencing Packages}
+\begin{lstlisting}
+with P; -- import content of package P
+use P;  -- make content of P usable w/o prefix "P."
+\end{lstlisting}
+
+\section{Subprograms}
+
+\subsection{With return value}
+\begin{lstlisting}
+function F1 (X : Integer) return Integer is
+   var : constant Integer := X + 1;
+begin
+   return var;
+end f1;
+-- same in short ("expression function"):
+function F1 (X : Integer) return Integer is (X + 1);
+\end{lstlisting}
+
+\subsection{No return value}
+\begin{lstlisting}
+procedure p1 (Y : in out Natural) is
+begin
+   Y := F1 (Y);
+   Put_Line ("Y is now" & Natural'Image(Y));
+end p1;
+\end{lstlisting}
+
+\section{Types}
+\subsection{Predefined Types}
+\begin{lstlisting}
+Boolean, Integer, Natural, Positive,
+Float, Character, Duration, String
+\end{lstlisting}
+
+\subsection{Creating New Types}
+\begin{lstlisting}
+-- type compatible to predefined Integer:
+subtype Months is Integer range 1 .. 12;
+-- completely new, Float-incompatible type:
+type Bitcoin is new Float;
+-- type that wraps around:
+type Hours is mod 24;
+\end{lstlisting}
+
+\subsection{Array Types}
+\begin{lstlisting} 
+-- declare type
+type Arr_T is array (positive range <>) of Integer;
+-- create array variable
+A : Arr_T (1 .. 2) := (2, 3);
+\end{lstlisting}
+
+\subsection{Composite Types}
+\begin{lstlisting}
+type My_Vector is record
+  x : Float;
+  y : Float;
+end record;
+\end{lstlisting}
+
+\subsection{Enumeration Types}
+\begin{lstlisting}
+type My_Weekdays is (Monday, Holiday, Friday);
+\end{lstlisting}
+\columnbreak
+
+\section{Conditional Control Flow}
+\begin{lstlisting}
+if A then -- ...
+elsif B then -- ..
+else -- ...
+end if;
+\end{lstlisting}
+
+\begin{lstlisting}
+case weekday is
+   when Monday | Friday =>
+      Do_Work;
+   others =>
+      null;
+end case;      
+\end{lstlisting}
+
+\section{Loops}
+\subsection{Counting Loop}
+\begin{lstlisting}
+for i in Integer range 1 .. 10 loop
+  -- ...
+end loop;
+\end{lstlisting}
+
+\subsection{Iterator Loop}
+\begin{lstlisting}
+for i in Months'Range loop
+  -- see first column
+end loop;
+\end{lstlisting}
+
+\subsection{Head-Controlled}
+\begin{lstlisting}
+while A > 5 loop
+  -- ...
+end loop;
+\end{lstlisting}
+
+\subsection{Body-Controlled}
+\begin{lstlisting}
+My_Loop : loop
+  A := Calc; -- subprogramm call
+  exit My_Loop when A > 5;
+end loop My_Loop;
+\end{lstlisting}
+
+
+\section{Attributes}
+{\scriptsize\texttt{S} for subtype, \texttt{A} for array. Some of them also work on the instance.}
+\begin{lstlisting}[escapechar=\%]
+S'First    -- lowest value in range of S
+S'Last     -- highest value in range of S
+A'First    -- first index of array
+A'Last     -- last value of array
+A'Length   -- length of array
+S'Image(v) -- stringification of value in v
+S'Range    -- iterator for loops over type range
+A'Range    -- iterator for loops over array indizes
+S'Size     -- size in bits of instantiated object
+S'Succ(v)  -- value that follows v in type range
+S'Pred(v)  -- value that preceded v in type range
+S'Val(x)   -- value of type whose position = x
+S'Pos(x)   -- position of the value x in the type S
+S'Floor(x) -- largest integral value %$\leq$% x in S
+S'Ceil(x)  -- smallest integral value %$\geq$% x in S
+\end{lstlisting}
+
+\section{Operators}
+\begin{lstlisting}
+and, or, xor, not -- Logical operators
++, -, *, /, mod, rem, **, abs, =, /=, <, <=, >, >=
+\end{lstlisting}
+
+\subsection{Boolean Short-Cut Operators}
+\begin{lstlisting}
+if A and then B then ... -- only check B when A true
+if A or else B then ... -- only check B when A false
+\end{lstlisting}
+
+\columnbreak
+
+\section{Subprogram Contracts}
+
+\subsection{Preconditions}
+\begin{lstlisting}
+procedure p (X, Y : Integer)
+  with Pre => Y /= 0 and then X > 0;
+\end{lstlisting}
+
+\subsection{Postconditions}
+\begin{lstlisting}
+function Increment (X : Integer) return Integer
+  with Pre  => X < Integer'Last,
+       Post => Increment'Result = X + 1;
+\end{lstlisting}
+\begin{lstlisting}
+procedure Increment (X : in out Integer)
+  with Pre  => X < Integer'Last,
+       Post => X = X'Old + 1;
+\end{lstlisting}
+
+\subsection{Global Variables}
+\begin{lstlisting}
+procedure P 
+  with Global => (Input  => (A, B),
+                  Output => (C, D),
+                  In_Out => (E));
+--  may read A, B and E; and write C, D, E
+\end{lstlisting}
+
+\subsection{Information Flow}
+\begin{lstlisting}
+procedure Sum (A, B : Integer; Result : out Integer)
+  with Depends => (Result => (A, B));  
+--  Result *must* depend on A and B
+\end{lstlisting}
+
+\section{Loop (In)Variants}
+\begin{lstlisting}
+pragma Loop_Invariant (J in Low .. High));
+pragma Loop_Variant (Increases => i, 
+                     Decreases => x);
+\end{lstlisting}
+
+\section{Testing and Proof}
+
+\subsection{Assertions}
+\begin{lstlisting}
+pragma Assert (X >= 0); -- abort execution for negative values
+pragma Assert (X >= 0); -- can never fail because of previous assert
+\end{lstlisting}
+
+\subsection{Assumptions}
+\begin{lstlisting}
+procedure No_Contract (Y : Integer) is 
+begin
+  pragma Assume (Y >= 0); 
+  -- now analysis only considers positive values
+  pragma Assert (Y >= 0); -- never fails in analysis
+end No_Contract;
+\end{lstlisting}
+
+\subsection{Suppressing False Warnings (Only use with utmost care!)}
+\begin{lstlisting}
+return A / B;
+pragma Annotate (GNATprove, False_Positive,
+                 "divide by zero", 
+                 "reviewed by John Doe");
+\end{lstlisting}
+\begin{lstlisting}
+X : Integer;
+pragma Annotate (GNATprove, Intentional,
+                 """X"" is not initialized",
+                 "reviewed by John Doe");
+\end{lstlisting}
+
+
+
+
+\vspace{\baselineskip}
+\linethickness{0.5mm} % Thickness of the footer line
+{\color{gray}\line(1,0){30}} % Print the line with a custom color
+
+\footnotesize{
+Created by Martin Becker, 2017 \url{<martin.becker@tum.de>}\\				
+Released under the MIT license.
+}
+\end{multicols*}
+
+\end{document}
