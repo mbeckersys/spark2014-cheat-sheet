@@ -18,10 +18,10 @@
 \usepackage{url}
 \usepackage{multicol}
 \usepackage[
-  colorlinks=false, 
-  pdftitle={Cheatsheet}, 
-  pdfauthor={Martin Becker <martin.becker@tum.de>}, 
-  pdfsubject={SPARK~2014 Mini Cheat Sheet}, 
+  colorlinks=false,
+  pdftitle={Cheatsheet},
+  pdfauthor={Martin Becker <martin.becker@tum.de>},
+  pdfsubject={SPARK~2014 Mini Cheat Sheet},
   pdfkeywords={Ada/SPARK, Cheatsheet}
 ]{hyperref}
 
@@ -37,7 +37,7 @@
 %% Fonts
 \renewcommand{\familydefault}{\sfdefault}
 
-%% Color definitions 
+%% Color definitions
 \definecolor{Pantone300}{RGB}{  0, 101, 189}
 \definecolor{Pantone540}{RGB}{  0,  51,  89}
 \definecolor{Pantone301}{RGB}{  0,  82, 147}
@@ -63,7 +63,7 @@
 
 %% listing setup
 % listings default format
-\lstset{captionpos=t, 
+\lstset{captionpos=t,
   xleftmargin=.2cm,
   basicstyle=\ttfamily\scriptsize,%
   language=Ada,
@@ -71,7 +71,7 @@
   keywordstyle=\bfseries\color{black},
   keywordstyle=[1]\bfseries\color{black},
   stringstyle=\color{darkgray},
-  morekeywords={Dim_Type,Angle_Type,Time_Type,Angular_Velocity_Type,Lat_Type,Val,Pred,Succ,Image,Last,First,Length,Pos,Floor,Ceil,Size},
+  morekeywords={Dim_Type,Angle_Type,Time_Type,Angular_Velocity_Type,Lat_Type,Val,Pred,Succ,Image,Last,First,Length,Pos,Floor,Ceiling,Size},
   identifierstyle=\color{darkgray},
   extendedchars=true,%
  % backgroundcolor=\color{shadecolor},%
@@ -81,7 +81,7 @@
   postbreak=\space,
   showspaces=false, % Keine Leerzeichensymbole
   showtabs=false, % Keine Tabsymbole
-  showstringspaces=false,% Leerzeichen in Strings         
+  showstringspaces=false,% Leerzeichen in Strings
   rulecolor=\color{gray},
   frame=l}
 
@@ -162,7 +162,7 @@ type Hours is mod 24; -- ranges from 0 to 23
 \end{lstlisting}
 
 \subsection{Array Types}
-\begin{lstlisting} 
+\begin{lstlisting}
 -- declare type
 type Arr_T is array (positive range <>) of Integer;
 -- create array variable
@@ -197,7 +197,7 @@ case weekday is
       Do_Work;
    others =>
       null;
-end case;      
+end case;
 \end{lstlisting}
 
 \section{Loops}
@@ -234,21 +234,21 @@ end loop My_Loop;
 \section{Attributes}
 {\scriptsize\texttt{S} for subtype, \texttt{A} for array. Some of them also work on the instance.}
 \begin{lstlisting}[escapechar=\%]
-S'First    -- lowest value in range of S
-S'Last     -- highest value in range of S
-A'First    -- first index of array
-A'Last     -- last value of array
-A'Length   -- length of array
-S'Image(v) -- stringification of value in v
-S'Range    -- iterator for loops over type range
-A'Range    -- iterator for loops over array indizes
-S'Size     -- size in bits of instantiated object
-S'Succ(v)  -- value that follows v in type range
-S'Pred(v)  -- value that preceded v in type range
-S'Val(x)   -- value of type whose position = x
-S'Pos(x)   -- position of the value x in the type S
-S'Floor(x) -- largest integral value %$\leq$% x in S
-S'Ceil(x)  -- smallest integral value %$\geq$% x in S
+S'First      -- lowest value in range of S
+S'Last       -- highest value in range of S
+A'First      -- first index of array
+A'Last       -- last value of array
+A'Length     -- length of array
+S'Image(v)   -- stringification of value in v
+S'Range      -- iterator for loops over type range
+A'Range      -- iterator for loops over array indizes
+S'Size       -- size in bits of instantiated object
+S'Succ(v)    -- value that follows v in type range
+S'Pred(v)    -- value that preceded v in type range
+S'Val(x)     -- value of type whose position = x
+S'Pos(x)     -- position of the value x in the type S
+S'Floor(x)   -- largest integral value %$\leq$% x in S
+S'Ceiling(x) -- smallest integral value %$\geq$% x in S
 \end{lstlisting}
 
 \section{Operators}
@@ -287,7 +287,7 @@ procedure Increment (X : in out Integer)
 
 \subsection{Global Variables}
 \begin{lstlisting}
-procedure P 
+procedure P
   with Global => (Input  => (A, B),
                   Output => (C, D),
                   In_Out => (E));
@@ -297,14 +297,14 @@ procedure P
 \subsection{Information Flow}
 \begin{lstlisting}
 procedure Sum (A, B : Integer; Result : out Integer)
-  with Depends => (Result => (A, B));  
+  with Depends => (Result => (A, B));
 --  Result *must* depend on A and B
 \end{lstlisting}
 
 \section{Loop (In)Variants}
 \begin{lstlisting}
-pragma Loop_Invariant (J in Low .. High));
-pragma Loop_Variant (Increases => i, 
+pragma Loop_Invariant (J in Low .. High);
+pragma Loop_Variant (Increases => i,
                      Decreases => x);
 \end{lstlisting}
 
@@ -318,9 +318,9 @@ pragma Assert (X >= 0); -- can never fail because of previous assert
 
 \subsection{Assumptions}
 \begin{lstlisting}
-procedure No_Contract (Y : Integer) is 
+procedure No_Contract (Y : Integer) is
 begin
-  pragma Assume (Y >= 0); 
+  pragma Assume (Y >= 0);
   -- now analysis only considers positive values
   pragma Assert (Y >= 0); -- never fails in analysis
 end No_Contract;
@@ -330,7 +330,7 @@ end No_Contract;
 \begin{lstlisting}
 return A / B;
 pragma Annotate (GNATprove, False_Positive,
-                 "divide by zero", 
+                 "divide by zero",
                  "reviewed by John Doe");
 \end{lstlisting}
 \begin{lstlisting}
@@ -348,7 +348,7 @@ pragma Annotate (GNATprove, Intentional,
 {\color{gray}\line(1,0){30}} % Print the line with a custom color
 
 \footnotesize{
-Created by Martin Becker, 2017 \url{<martin.becker@tum.de>}\\				
+Created by Martin Becker, 2017 \url{<martin.becker@tum.de>}\\
 Released under the MIT license.
 }
 \end{multicols*}
