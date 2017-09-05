@@ -102,13 +102,13 @@
 
 \subsection{Specification (*.ads)}
 \begin{lstlisting}
-package P with SPARK_Mode => On is
+package P with SPARK_Mode is
    procedure Something (X : Integer);
 end P;
 \end{lstlisting}
 \subsection{Body (*.adb)}
 \begin{lstlisting}
-package body P with SPARK_Mode => On is
+package body P with SPARK_Mode is
    procedure Something (X : Integer) is
    begin
      -- ..
@@ -237,7 +237,7 @@ end loop My_Loop;
 S'First      -- lowest value in range of S
 S'Last       -- highest value in range of S
 A'First      -- first index of array
-A'Last       -- last value of array
+A'Last       -- last index of array
 A'Length     -- length of array
 S'Image(v)   -- stringification of value in v
 S'Range      -- iterator in loops over type range
@@ -347,8 +347,11 @@ pragma Annotate (GNATprove, Intentional,
 \linethickness{0.5mm} % Thickness of the footer line
 {\color{gray}\line(1,0){30}} % Print the line with a custom color
 
+\input{revision}
+
 \footnotesize{
-Created by Martin Becker, 2017 \url{<martin.becker@tum.de>}\\
+Created by Martin Becker, \url{https://github.com/mbeckersys}\\
+Revision \revision\\
 Released under the MIT license.
 }
 \end{multicols*}
